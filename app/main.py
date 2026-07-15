@@ -5,7 +5,7 @@ Run with: uvicorn app.main:app --reload
 
 from fastapi import FastAPI
 
-from app.routers import auth
+from app.routers import ai, auth
 
 app = FastAPI(
     title="AI Content Assistant API",
@@ -14,6 +14,7 @@ app = FastAPI(
 )
 
 app.include_router(auth.router)
+app.include_router(ai.router)
 
 
 @app.get("/health")
