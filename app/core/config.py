@@ -25,8 +25,10 @@ class Settings(BaseSettings):
     # rate limiting
     daily_request_limit: int = 20
 
-    # tells pydantic-settings to load values from a .env file
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+    # tells pydantic-settings to load values from a .env file.
+    # extra="ignore" because .env also has POSTGRES_USER/PASSWORD/DB, which
+    # only docker-compose needs (to create the container), not this app.
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
 
 # Created once at import time, reused everywhere (no need to re-read .env each time)
