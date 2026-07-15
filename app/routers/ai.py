@@ -9,10 +9,12 @@ The 3 AI feature endpoints. Each one:
    stack trace or crashing the process
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
+from app.core.config import settings
 from app.core.deps import get_current_user
+from app.core.limiter import limiter
 from app.database.session import get_db
 from app.models.request_log import RequestLog, RequestType
 from app.models.user import User
@@ -35,6 +37,11 @@ router = APIRouter(prefix="/ai", tags=["ai"])
 
 LLM_UNAVAILABLE_DETAIL = "AI service is temporarily unavailable. Please try again later."
 
+# all 3 AI endpoints draw from the same daily bucket per user: same limit
+# string + same "scope" means slowapi counts them together, not separately.
+DAILY_LIMIT = f"{settings.daily_request_limit}/day"
+AI_SCOPE = "ai_daily_quota"
+
 
 def _log_request(db: Session, user_id: int, request_type: RequestType, input_text: str, output_text: str | None) -> None:
     log = RequestLog(
@@ -48,7 +55,9 @@ def _log_request(db: Session, user_id: int, request_type: RequestType, input_tex
 
 
 @router.post("/summarize", response_model=SummarizeResponse)
+@limiter.shared_limit(DAILY_LIMIT, scope=AI_SCOPE)
 def summarize(
+    request: Request,
     payload: SummarizeRequest,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -64,7 +73,9 @@ def summarize(
 
 
 @router.post("/qa", response_model=QAResponse)
+@limiter.shared_limit(DAILY_LIMIT, scope=AI_SCOPE)
 def question_answer(
+    request: Request,
     payload: QARequest,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -84,7 +95,9 @@ def question_answer(
 
 
 @router.post("/sentiment", response_model=SentimentResponse)
+@limiter.shared_limit(DAILY_LIMIT, scope=AI_SCOPE)
 def sentiment(
+    request: Request,
     payload: SentimentRequest,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
