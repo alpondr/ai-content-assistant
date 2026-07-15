@@ -1,0 +1,21 @@
+# environment
+.env
+venv/
+.venv/
+
+# python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.mypy_cache/
+.pytest_cache/
+
+# editor / os
+.vscode/
+.idea/
+.DS_Store
+
+# alembic (keep versions, ignore local db files if any)
+*.db
+*.sqlite3
