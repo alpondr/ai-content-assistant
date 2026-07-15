@@ -10,7 +10,7 @@ from slowapi.middleware import SlowAPIMiddleware
 
 from app.core.config import settings
 from app.core.limiter import limiter
-from app.routers import ai, auth
+from app.routers import ai, auth, history
 
 app = FastAPI(
     title="AI Content Assistant API",
@@ -39,6 +39,7 @@ def rate_limit_exceeded_handler(request: Request, exc: RateLimitExceeded):
 
 app.include_router(auth.router)
 app.include_router(ai.router)
+app.include_router(history.router)
 
 
 @app.get("/health")
