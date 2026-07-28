@@ -11,9 +11,7 @@ __pycache__/
 .mypy_cache/
 .pytest_cache/
 
-# editor / os
-.vscode/
-.idea/
+# os
 .DS_Store
 
 # alembic (keep versions, ignore local db files if any)
