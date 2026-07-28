@@ -1,4 +1,4 @@
-"""Pydantic schema for reading back RequestLog rows (history endpoint, Step 9)."""
+"""Pydantic schema for reading back RequestLog rows (history endpoint)."""
 
 from datetime import datetime
 

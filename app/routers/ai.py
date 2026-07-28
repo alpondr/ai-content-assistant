@@ -3,7 +3,7 @@ The 3 AI feature endpoints. Each one:
 1. requires a logged-in user (get_current_user)
 2. calls the matching function in the service layer
 3. saves what happened to RequestLog - success or failure alike, so the
-   history (Step 9) and the daily rate limit (Step 8) always reflect what
+   history endpoint and the daily rate limit always reflect what
    actually happened
 4. if the LLM call failed, returns a clean 503 instead of leaking a
    stack trace or crashing the process

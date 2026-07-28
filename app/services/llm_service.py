@@ -2,7 +2,7 @@
 Service layer for talking to the LLM (Google Gemini).
 
 Why is this in its own file instead of inside the routers?
-- Routers (Step 7) should only deal with HTTP: read the request, call a
+- Routers should only deal with HTTP: read the request, call a
   service function, return a response. They shouldn't know *how* a summary
   gets produced, only *that* calling summarize_text() gives one back.
 - If we ever switch from Gemini to another provider, or add caching/retries,
@@ -12,7 +12,7 @@ Why is this in its own file instead of inside the routers?
   with a fake API key/mocked client, no HTTP server needed.
 
 Every public function here can raise LLMServiceError. Routers are expected
-to catch it and turn it into a clean HTTP error (Step 7), so a Gemini outage
+to catch it and turn it into a clean HTTP error, so a Gemini outage
 never turns into an unhandled 500 crash.
 """
 
